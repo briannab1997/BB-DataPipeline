@@ -154,15 +154,18 @@
       color: var(--cream);
       background: rgba(0, 187, 240, 0.12);
       border: 1px solid var(--line);
-      transition: transform 180ms ease, background 180ms ease;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
     }
 
     .action-button:hover,
     .filter-button:hover,
-    .tab-button:hover,
-    .stage-card:hover,
-    .issue-card:hover {
+    .tab-button:hover {
       transform: translateX(3px);
+      border-color: rgba(253, 180, 75, 0.56);
+    }
+
+    .action-button:hover {
+      background: rgba(0, 187, 240, 0.22);
     }
 
     .workspace {
@@ -266,6 +269,14 @@
       min-height: 330px;
       color: var(--white);
       background: linear-gradient(145deg, rgba(0, 32, 74, 0.98), rgba(0, 87, 146, 0.92));
+      background-size: 160% 160%;
+      transition: background-position 420ms ease, border-color 220ms ease, transform 220ms ease;
+    }
+
+    .score-panel:hover {
+      background-position: 100% 50%;
+      border-color: rgba(0, 187, 240, 0.62);
+      transform: translateY(-2px);
     }
 
     .score-ring {
@@ -278,6 +289,12 @@
       background:
         linear-gradient(to top, var(--cyan) calc(var(--score) * 1%), rgba(255, 255, 255, 0.1) 0);
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+      transition: filter 220ms ease, transform 220ms ease;
+    }
+
+    .score-panel:hover .score-ring {
+      filter: drop-shadow(0 0 18px rgba(0, 187, 240, 0.36));
+      transform: translateY(-3px);
     }
 
     .score-core {
@@ -316,8 +333,18 @@
       border-radius: 8px;
       padding: 16px;
       color: var(--cream);
-      background: rgba(0, 20, 44, 0.78);
+      background:
+        linear-gradient(120deg, rgba(0, 187, 240, 0.2), transparent 38%, rgba(253, 180, 75, 0.18) 72%, transparent),
+        rgba(0, 20, 44, 0.78);
+      background-size: 220% 100%;
       border: 1px solid var(--line);
+      transition: background-position 420ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .metric:hover {
+      background-position: 100% 0;
+      border-color: rgba(253, 180, 75, 0.5);
+      transform: translateY(-2px);
     }
 
     .metric span,
@@ -349,9 +376,32 @@
       border-radius: 8px;
       padding: 14px;
       text-align: left;
-      transition: transform 180ms ease, border 180ms ease, background 180ms ease;
+      overflow: hidden;
+      position: relative;
+      transition: transform 220ms ease, border 180ms ease, background 220ms ease, color 180ms ease;
       color: var(--cream);
       background: rgba(0, 20, 44, 0.72);
+    }
+
+    .stage-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      background: linear-gradient(110deg, transparent 0 22%, rgba(0, 187, 240, 0.22), rgba(253, 180, 75, 0.2), transparent 78% 100%);
+      transform: translateX(-64%);
+      transition: opacity 180ms ease, transform 520ms ease;
+    }
+
+    .stage-card:hover {
+      transform: translateX(5px);
+      border-color: rgba(0, 187, 240, 0.65);
+    }
+
+    .stage-card:hover::after {
+      opacity: 1;
+      transform: translateX(64%);
     }
 
     .stage-card.active {
@@ -370,11 +420,21 @@
       color: var(--navy);
       background: var(--amber);
       font-weight: 900;
+      position: relative;
+      z-index: 1;
+      transition: transform 220ms ease, background 220ms ease;
+    }
+
+    .stage-card:hover .stage-number {
+      background: var(--cyan);
+      transform: rotate(-4deg) scale(1.06);
     }
 
     .stage-card h3 {
       margin: 0 0 8px;
       font-size: 1rem;
+      position: relative;
+      z-index: 1;
     }
 
     .stage-card p {
@@ -383,6 +443,8 @@
       opacity: 0.74;
       font-size: 0.9rem;
       line-height: 1.45;
+      position: relative;
+      z-index: 1;
     }
 
     .content-grid {
@@ -451,7 +513,18 @@
       border-radius: 8px;
       padding: 14px;
       text-align: left;
-      transition: transform 180ms ease, border 180ms ease;
+      background:
+        linear-gradient(120deg, rgba(0, 187, 240, 0.08), transparent 42%, rgba(253, 180, 75, 0.12)),
+        rgba(247, 249, 251, 0.94);
+      background-size: 210% 100%;
+      transition: transform 180ms ease, border 180ms ease, background-position 360ms ease, box-shadow 180ms ease;
+    }
+
+    .issue-card:hover {
+      transform: translateX(5px);
+      background-position: 100% 0;
+      border-color: rgba(0, 187, 240, 0.62);
+      box-shadow: 5px 0 0 var(--amber) inset;
     }
 
     .issue-card.active {
@@ -486,6 +559,12 @@
         linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
         linear-gradient(145deg, rgba(0, 32, 74, 0.98), rgba(0, 87, 146, 0.92));
       background-size: 24px 24px, 24px 24px, auto;
+      transition: background-position 520ms ease, border-color 220ms ease;
+    }
+
+    .section-spaced:hover .detail-panel {
+      background-position: 12px 12px, -12px -12px, 100% 50%;
+      border-color: rgba(0, 187, 240, 0.5);
     }
 
     .detail-panel h3 {
@@ -511,6 +590,13 @@
       padding: 14px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(0, 187, 240, 0.22);
+      transition: transform 200ms ease, border-color 200ms ease, background 200ms ease;
+    }
+
+    .mini-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(253, 180, 75, 0.5);
+      background: rgba(0, 187, 240, 0.11);
     }
 
     .mini-card strong {
@@ -543,6 +629,13 @@
       height: 100%;
       width: var(--bar);
       background: linear-gradient(90deg, var(--blue), var(--cyan), var(--amber));
+      background-size: 180% 100%;
+      transition: background-position 420ms ease, filter 220ms ease;
+    }
+
+    .bar-row:hover .bar-fill {
+      background-position: 100% 0;
+      filter: saturate(1.3);
     }
 
     .table-wrap {
@@ -577,6 +670,17 @@
 
     .hidden {
       display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
     }
 
     @media (max-width: 940px) {
