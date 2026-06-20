@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BB DataPipeline</title>
+  <style>
+    :root {
+      --ink: #2c2b30;
+      --charcoal: #4f4f51;
+      --paper: #f5f1f2;
+      --mist: #d6d6d6;
+      --rose: #f2c4ce;
+      --coral: #f58f7c;
+      --mint: #b8f2d0;
+      --gold: #ffd166;
+      --white: #ffffff;
+      --shadow: 0 24px 70px rgba(44, 43, 48, 0.22);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(245, 143, 124, 0.22), transparent 30rem),
+        radial-gradient(circle at 88% 0%, rgba(242, 196, 206, 0.42), transparent 28rem),
+        linear-gradient(135deg, #f1eeee 0%, #ddd9d9 48%, #f5e5e0 100%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 54px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      color: var(--white);
+      background: rgba(44, 43, 48, 0.94);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      z-index: 5;
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--rose), var(--coral));
+      border-radius: 12px;
+      font-weight: 900;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill,
+    .action-button {
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .pill {
+      color: var(--rose);
+      background: rgba(242, 196, 206, 0.11);
+      border: 1px solid rgba(242, 196, 206, 0.24);
+    }
+
+    .action-button {
+      color: var(--ink);
+      background: var(--white);
+      transition: transform 180ms ease, background 180ms ease;
+    }
+
+    .action-button:hover,
+    .filter-button:hover,
+    .tab-button:hover,
+    .stage-card:hover,
+    .issue-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 20px;
+    }
+
+    .hero-panel,
+    .score-panel,
+    .section,
+    .stage-card,
+    .issue-card {
+      border: 1px solid rgba(44, 43, 48, 0.12);
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-panel {
+      border-radius: 24px;
+      padding: clamp(24px, 5vw, 56px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-panel::after {
+      content: "";
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      right: -80px;
+      bottom: -90px;
+      border-radius: 34px;
+      background: linear-gradient(135deg, rgba(245, 143, 124, 0.62), rgba(242, 196, 206, 0.4));
+      transform: rotate(18deg);
+    }
+
+    .eyebrow {
+      width: fit-content;
+      margin: 0 0 16px;
+      color: var(--ink);
+      background: var(--rose);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(2.3rem, 7vw, 5.9rem);
+      line-height: 0.92;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      margin: 20px 0 0;
+      color: #514f55;
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+
+    .score-panel {
+      border-radius: 24px;
+      padding: 24px;
+      display: grid;
+      align-content: space-between;
+      min-height: 360px;
+      color: var(--white);
+      background:
+        linear-gradient(145deg, rgba(44, 43, 48, 0.98), rgba(79, 79, 81, 0.95)),
+        var(--ink);
+    }
+
+    .score-ring {
+      width: min(230px, 74vw);
+      aspect-ratio: 1;
+      margin: 8px auto 18px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--coral) calc(var(--score) * 1%), rgba(255, 255, 255, 0.11) 0);
+      box-shadow: inset 0 0 0 18px rgba(255, 255, 255, 0.04);
+    }
+
+    .score-core {
+      width: 72%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--ink);
+      text-align: center;
+    }
+
+    .score-core strong {
+      display: block;
+      font-size: 4.4rem;
+      line-height: 1;
+    }
+
+    .score-core span {
+      color: var(--rose);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .metric {
+      min-width: 0;
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(44, 43, 48, 0.1);
+    }
+
+    .metric span,
+    .section-label,
+    .mini-label {
+      display: block;
+      color: #6a676d;
+      font-size: 0.74rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 8px;
+      font-size: clamp(1.65rem, 4vw, 2.7rem);
+      line-height: 1;
+    }
+
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stage-card {
+      min-height: 155px;
+      border-radius: 18px;
+      padding: 16px;
+      text-align: left;
+      transition: transform 180ms ease, border 180ms ease, background 180ms ease;
+    }
+
+    .stage-card.active {
+      background: var(--ink);
+      color: var(--white);
+      border-color: var(--coral);
+    }
+
+    .stage-number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 18px;
+      border-radius: 12px;
+      color: var(--ink);
+      background: var(--coral);
+      font-weight: 900;
+    }
+
+    .stage-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .stage-card p {
+      margin: 0;
+      color: inherit;
+      opacity: 0.74;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 20px;
+    }
+
+    .section {
+      border-radius: 22px;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .section h2 {
+      margin: 4px 0 0;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+    }
+
+    .tabs,
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tab-button,
+    .filter-button {
+      border-radius: 999px;
+      padding: 9px 12px;
+      color: var(--ink);
+      background: rgba(44, 43, 48, 0.07);
+      font-weight: 850;
+      transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+    }
+
+    .tab-button.active,
+    .filter-button.active {
+      color: var(--white);
+      background: var(--ink);
+    }
+
+    .issue-list {
+      display: grid;
+      gap: 10px;
+      max-height: 460px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .issue-card {
+      border-radius: 16px;
+      padding: 14px;
+      text-align: left;
+      transition: transform 180ms ease, border 180ms ease;
+    }
+
+    .issue-card.active {
+      border-color: var(--coral);
+    }
+
+    .issue-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .severity {
+      border-radius: 999px;
+      padding: 5px 8px;
+      color: var(--ink);
+      background: var(--gold);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .detail-panel {
+      min-height: 360px;
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--white);
+      background:
+        linear-gradient(145deg, rgba(44, 43, 48, 0.96), rgba(79, 79, 81, 0.92)),
+        var(--ink);
+    }
+
+    .detail-panel h3 {
+      margin: 8px 0 8px;
+      font-size: 1.55rem;
+    }
+
+    .detail-panel p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.65;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .mini-card {
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.5rem;
+    }
+
+    .chart-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 86px;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+    }
+
+    .bar-track {
+      height: 14px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(44, 43, 48, 0.1);
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: var(--bar);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--coral), var(--rose));
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border-radius: 18px;
+      border: 1px solid rgba(44, 43, 48, 0.1);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    table {
+      width: 100%;
+      min-width: 780px;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(44, 43, 48, 0.09);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      color: #6a676d;
+      background: rgba(44, 43, 48, 0.05);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 940px) {
+      .hero,
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline-grid,
+      .metrics {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 620px) {
+      .shell {
+        width: min(100% - 20px, 1180px);
+        padding-top: 10px;
+      }
+
+      .topbar {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .pipeline-grid,
+      .metrics,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 18vw, 4rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <nav class="topbar" aria-label="Project navigation">
+      <div class="brand">
+        <div class="brand-mark">DP</div>
+        <span>BB DataPipeline</span>
+      </div>
+      <div class="top-actions">
+        <span class="pill">Python ETL</span>
+        <button class="action-button" data-download="clean">Download Clean CSV</button>
+        <button class="action-button" data-download="summary">Download Summary</button>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-panel">
+        <p class="eyebrow">Data Engineering Portfolio Project</p>
+        <h1>Operational Data Pipeline</h1>
+        <p class="hero-copy">
+          A Python workflow that ingests messy order data, validates the records, standardizes fields, rejects bad rows, and produces clean exports that analysts and support teams can trust.
+        </p>
+      </div>
+
+      <aside class="score-panel" style="--score: 46">
+        <div>
+          <p class="section-label">Pipeline Health</p>
+          <div class="score-ring" aria-label="Pipeline score 46 out of 100">
+            <div class="score-core">
+              <div>
+                <strong id="scoreValue">46</strong>
+                <span>Score</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p>The score reflects the raw sample before cleanup. The cleaned export removes high-risk records and keeps the pipeline output usable.</p>
+      </aside>
+    </section>
+
+    <section class="metrics" aria-label="Pipeline metrics">
+      <div class="metric"><span>Rows Processed</span><strong id="rowsMetric">14</strong></div>
+      <div class="metric"><span>Clean Records</span><strong id="cleanMetric">8</strong></div>
+      <div class="metric"><span>Issues Found</span><strong id="issuesMetric">6</strong></div>
+      <div class="metric"><span>Total Revenue</span><strong id="revenueMetric">$4.0K</strong></div>
+    </section>
+
+    <section class="pipeline-grid" aria-label="Pipeline stages">
+      <button class="stage-card active" data-stage="ingest">
+        <span class="stage-number">01</span>
+        <h3>Ingest</h3>
+        <p>Reads raw CSV order data with inconsistent values.</p>
+      </button>
+      <button class="stage-card" data-stage="validate">
+        <span class="stage-number">02</span>
+        <h3>Validate</h3>
+        <p>Checks duplicates, dates, required fields, quantities, and status values.</p>
+      </button>
+      <button class="stage-card" data-stage="transform">
+        <span class="stage-number">03</span>
+        <h3>Transform</h3>
+        <p>Standardizes customer IDs, regions, categories, revenue, and fulfillment days.</p>
+      </button>
+      <button class="stage-card" data-stage="publish">
+        <span class="stage-number">04</span>
+        <h3>Publish</h3>
+        <p>Writes clean CSV, issue logs, and summary JSON reports.</p>
+      </button>
+      <button class="stage-card" data-stage="monitor">
+        <span class="stage-number">05</span>
+        <h3>Monitor</h3>
+        <p>Surfaces risk areas so the next run can improve.</p>
+      </button>
+    </section>
+
+    <section class="content-grid">
+      <div class="section">
+        <div class="section-head">
+          <div>
+            <span class="section-label">Validation Queue</span>
+            <h2>Issues</h2>
+          </div>
+        </div>
+        <div class="filters" id="filters"></div>
+        <div class="issue-list" id="issueList" aria-live="polite"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <div>
+            <span class="section-label">Pipeline Explorer</span>
+            <h2 id="panelTitle">Stage Details</h2>
+          </div>
+          <div class="tabs" id="tabs">
+            <button class="tab-button active" data-view="stage">Stage</button>
+            <button class="tab-button" data-view="charts">Charts</button>
+            <button class="tab-button" data-view="records">Records</button>
+          </div>
+        </div>
+
+        <div id="stageView" class="detail-panel"></div>
+        <div id="chartsView" class="hidden chart-grid"></div>
+        <div id="recordsView" class="hidden table-wrap"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const rawOrdersCsv = `order_id,customer_id,order_date,ship_date,region,category,quantity,unit_price,status
+ORD-1001,c-224,2026-05-01,2026-05-03,NE,software,2,129.00,Delivered
+ORD-1002,c-118,2026-05-01,2026-05-07,Southeast,hardware,1,899.00,shipped
+ORD-1003,c-507,2026-05-02,2026-05-02,West,cloud services,4,74.50,processing
+ORD-1004,c-331,2026-05-03,2026-05-01,Midwest,software,1,249.00,Delivered
+ORD-1005,c-224,2026-05-04,2026-05-08,North East,training,3,159.00,Delivered
+ORD-1006,c-902,2026-05-05,2026-05-06,SE,hardware,0,349.99,Returned
+ORD-1007,c-611,2026-05-06,2026-05-12,West,cloud services,2,$199.50,Shipped
+ORD-1008,c-118,2026-05-07,2026-05-10,Midwest,software,5,89.00,Delivered
+ORD-1009,c-764,2026-05-09,2026-05-11,Northeast,hardware,1,1099.00,Delivered
+ORD-1010,c-344,2026-05-10,2026-05-16,Southeast,training,2,199.00,Cancelled
+ORD-1011,c-615,2026-05-11,2026-05-13,West,software,1,149.00,packed
+ORD-1012,c-732,2026-05-12,not-a-date,Midwest,hardware,2,449.00,Delivered
+ORD-1008,c-118,2026-05-07,2026-05-10,Midwest,software,5,89.00,Delivered
+,c-888,2026-05-14,2026-05-18,Southeast,cloud services,2,299.00,Processing`;
+
+    const stages = {
+      ingest: {
+        title: "Ingest",
+        summary: "The pipeline starts with raw CSV order data. The sample intentionally includes duplicate IDs, invalid dates, inconsistent regions, mixed status casing, and numeric formatting issues.",
+        stats: [["Source", "CSV"], ["Rows", "14"], ["Columns", "9"], ["Mode", "Batch"]]
+      },
+      validate: {
+        title: "Validate",
+        summary: "Validation checks protect the cleaned export by finding bad dates, duplicate order IDs, missing required fields, invalid quantities, and unexpected status values.",
+        stats: [["Rules", "7"], ["Issues", "6"], ["High Risk", "6"], ["Rejected", "6"]]
+      },
+      transform: {
+        title: "Transform",
+        summary: "Clean rows are standardized into a consistent output shape with normalized customer IDs, regions, categories, unit prices, revenue, and fulfillment timing.",
+        stats: [["Clean Rows", "8"], ["Revenue", "$3,973"], ["Regions", "4"], ["Priority", "3"]]
+      },
+      publish: {
+        title: "Publish",
+        summary: "The Python CLI writes clean_orders.csv, pipeline_issues.csv, and pipeline_summary.json so the output can be reviewed, shared, or loaded into a downstream dashboard.",
+        stats: [["Exports", "3"], ["Format", "CSV/JSON"], ["Tests", "Passing"], ["CLI", "Ready"]]
+      },
+      monitor: {
+        title: "Monitor",
+        summary: "The summary highlights the fields causing the most failures, making it easier to improve source data quality before the next pipeline run.",
+        stats: [["Top Field", "ship_date"], ["Score", "46/100"], ["Trend", "Needs cleanup"], ["Next Step", "Fix source"]]
+      }
+    };
+
+    const regionRevenue = {
+      Midwest: 445,
+      Northeast: 1834,
+      Southeast: 1297,
+      West: 397
+    };
+
+    const summary = {
+      rows_processed: 14,
+      clean_records: 8,
+      rejected_records: 6,
+      issues_found: 6,
+      high_severity_issues: 6,
+      pipeline_score: 46,
+      total_revenue: "3973.00",
+      top_issue_fields: {
+        ship_date: 2,
+        order_id: 2,
+        quantity: 1,
+        status: 1
+      }
+    };
+
+    const issues = [
+      { row_number: 5, order_id: "ORD-1004", field: "ship_date", severity: "high", message: "Ship date occurs before order date." },
+      { row_number: 7, order_id: "ORD-1006", field: "quantity", severity: "high", message: "Quantity must be greater than zero." },
+      { row_number: 12, order_id: "ORD-1011", field: "status", severity: "high", message: "Status is outside the expected values." },
+      { row_number: 13, order_id: "ORD-1012", field: "ship_date", severity: "high", message: "Ship date is not a valid YYYY-MM-DD date." },
+      { row_number: 14, order_id: "ORD-1008", field: "order_id", severity: "high", message: "Duplicate order ID found." },
+      { row_number: 15, order_id: "UNKNOWN", field: "order_id", severity: "high", message: "order_id is required." }
+    ];
+
+    const cleanRows = [
+      ["ORD-1001", "C-224", "Northeast", "Software", "258.00", "Delivered", "No"],
+      ["ORD-1002", "C-118", "Southeast", "Hardware", "899.00", "Shipped", "Yes"],
+      ["ORD-1003", "C-507", "West", "Cloud Services", "298.00", "Processing", "Yes"],
+      ["ORD-1005", "C-224", "Northeast", "Training", "477.00", "Delivered", "No"],
+      ["ORD-1007", "C-611", "West", "Cloud Services", "399.00", "Shipped", "No"],
+      ["ORD-1008", "C-118", "Midwest", "Software", "445.00", "Delivered", "No"],
+      ["ORD-1009", "C-764", "Northeast", "Hardware", "1099.00", "Delivered", "Yes"],
+      ["ORD-1010", "C-344", "Southeast", "Training", "398.00", "Cancelled", "No"]
+    ];
+
+    let activeStage = "ingest";
+    let activeFilter = "all";
+    let activeIssue = issues[0];
+
+    const issueList = document.querySelector("#issueList");
+    const filters = document.querySelector("#filters");
+    const stageView = document.querySelector("#stageView");
+    const chartsView = document.querySelector("#chartsView");
+    const recordsView = document.querySelector("#recordsView");
+
+    function init() {
+      document.querySelector("#scoreValue").textContent = summary.pipeline_score;
+      document.querySelector("#rowsMetric").textContent = summary.rows_processed;
+      document.querySelector("#cleanMetric").textContent = summary.clean_records;
+      document.querySelector("#issuesMetric").textContent = summary.issues_found;
+      document.querySelector("#revenueMetric").textContent = `$${(Number(summary.total_revenue) / 1000).toFixed(1)}K`;
+
+      renderFilters();
+      renderIssues();
+      renderStage();
+      renderCharts();
+      renderRecords();
+      bindEvents();
+    }
+
+    function bindEvents() {
+      document.querySelectorAll(".stage-card").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeStage = button.dataset.stage;
+          document.querySelectorAll(".stage-card").forEach((card) => card.classList.toggle("active", card.dataset.stage === activeStage));
+          renderStage();
+          setView("stage");
+        });
+      });
+
+      document.querySelectorAll(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => setView(button.dataset.view));
+      });
+
+      document.querySelectorAll("[data-download]").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.dataset.download === "summary") {
+            downloadFile("pipeline_summary.json", JSON.stringify(summary, null, 2), "application/json");
+          } else {
+            downloadFile("clean_orders.csv", buildCleanCsv(), "text/csv");
+          }
+        });
+      });
+    }
+
+    function setView(view) {
+      document.querySelectorAll(".tab-button").forEach((button) => button.classList.toggle("active", button.dataset.view === view));
+      stageView.classList.toggle("hidden", view !== "stage");
+      chartsView.classList.toggle("hidden", view !== "charts");
+      recordsView.classList.toggle("hidden", view !== "records");
+      document.querySelector("#panelTitle").textContent = view === "stage" ? "Stage Details" : view === "charts" ? "Pipeline Charts" : "Clean Records";
+    }
+
+    function renderFilters() {
+      const fields = ["all", ...new Set(issues.map((issue) => issue.field))];
+      filters.innerHTML = fields.map((field) => `<button class="filter-button ${field === activeFilter ? "active" : ""}" data-filter="${field}">${toTitle(field)}</button>`).join("");
+      filters.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeFilter = button.dataset.filter;
+          renderFilters();
+          renderIssues();
+        });
+      });
+    }
+
+    function renderIssues() {
+      const filtered = activeFilter === "all" ? issues : issues.filter((issue) => issue.field === activeFilter);
+      if (!filtered.includes(activeIssue)) {
+        activeIssue = filtered[0] || issues[0];
+      }
+      issueList.innerHTML = filtered.map((issue, index) => `
+        <button class="issue-card ${issue === activeIssue ? "active" : ""}" data-index="${issues.indexOf(issue)}">
+          <div class="issue-top">
+            <strong>${escapeHtml(issue.order_id)}</strong>
+            <span class="severity">${escapeHtml(issue.severity)}</span>
+          </div>
+          <span class="mini-label">Row ${issue.row_number} · ${escapeHtml(issue.field)}</span>
+          <p>${escapeHtml(issue.message)}</p>
+        </button>
+      `).join("");
+
+      issueList.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeIssue = issues[Number(button.dataset.index)];
+          renderIssues();
+          activeStage = "validate";
+          document.querySelectorAll(".stage-card").forEach((card) => card.classList.toggle("active", card.dataset.stage === activeStage));
+          renderStage();
+          setView("stage");
+        });
+      });
+    }
+
+    function renderStage() {
+      const stage = stages[activeStage];
+      stageView.innerHTML = `
+        <span class="section-label">${activeStage}</span>
+        <h3>${stage.title}</h3>
+        <p>${stage.summary}</p>
+        <div class="mini-grid">
+          ${stage.stats.map(([label, value]) => `
+            <div class="mini-card">
+              <span class="mini-label">${label}</span>
+              <strong>${value}</strong>
+            </div>
+          `).join("")}
+        </div>
+        <div class="mini-card" style="margin-top: 12px;">
+          <span class="mini-label">Selected Issue</span>
+          <strong>${escapeHtml(activeIssue.order_id)}</strong>
+          <p>${escapeHtml(activeIssue.message)}</p>
+        </div>
+      `;
+    }
+
+    function renderCharts() {
+      const maxRevenue = Math.max(...Object.values(regionRevenue));
+      const revenueBars = Object.entries(regionRevenue).map(([region, value]) => `
+        <div class="bar-row">
+          <span>${region}</span>
+          <div class="bar-track"><div class="bar-fill" style="--bar: ${(value / maxRevenue) * 100}%"></div></div>
+          <span>$${value.toLocaleString()}</span>
+        </div>
+      `).join("");
+
+      const fieldBars = Object.entries(summary.top_issue_fields).map(([field, value]) => `
+        <div class="bar-row">
+          <span>${toTitle(field)}</span>
+          <div class="bar-track"><div class="bar-fill" style="--bar: ${(value / 2) * 100}%"></div></div>
+          <span>${value} issue${value === 1 ? "" : "s"}</span>
+        </div>
+      `).join("");
+
+      chartsView.innerHTML = `
+        <div class="section-label">Revenue by Region</div>
+        ${revenueBars}
+        <div class="section-label" style="margin-top: 22px;">Top Issue Fields</div>
+        ${fieldBars}
+      `;
+    }
+
+    function renderRecords() {
+      recordsView.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>Region</th>
+              <th>Category</th>
+              <th>Revenue</th>
+              <th>Status</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${cleanRows.map((row) => `
+              <tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function buildCleanCsv() {
+      const header = "order_id,customer_id,region,category,revenue,status,priority_lane";
+      return [header, ...cleanRows.map((row) => row.join(","))].join("\n");
+    }
+
+    function downloadFile(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function toTitle(value) {
+      return value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    init();
+  </script>
+</body>
+</html>

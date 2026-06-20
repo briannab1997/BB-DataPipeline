@@ -1,0 +1,7 @@
+row_number,order_id,field,severity,message
+5,ORD-1004,ship_date,high,Ship date occurs before order date.
+7,ORD-1006,quantity,high,Quantity must be greater than zero.
+12,ORD-1011,status,high,Status is outside the expected values.
+13,ORD-1012,ship_date,high,Ship date is not a valid YYYY-MM-DD date.
+14,ORD-1008,order_id,high,Duplicate order ID found.
+15,UNKNOWN,order_id,high,order_id is required.

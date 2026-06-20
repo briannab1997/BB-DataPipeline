@@ -1,0 +1,8 @@
+[project]
+name = "bb-datapipeline"
+version = "1.0.0"
+description = "A Python ETL portfolio project for cleaning and reporting operational order data."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

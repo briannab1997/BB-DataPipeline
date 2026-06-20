@@ -1,0 +1,9 @@
+order_id,customer_id,order_date,ship_date,fulfillment_days,region,category,quantity,unit_price,revenue,status,priority_lane
+ORD-1001,C-224,2026-05-01,2026-05-03,2,Northeast,Software,2,129.00,258.00,Delivered,No
+ORD-1002,C-118,2026-05-01,2026-05-07,6,Southeast,Hardware,1,899.00,899.00,Shipped,Yes
+ORD-1003,C-507,2026-05-02,2026-05-02,0,West,Cloud Services,4,74.50,298.00,Processing,Yes
+ORD-1005,C-224,2026-05-04,2026-05-08,4,Northeast,Training,3,159.00,477.00,Delivered,No
+ORD-1007,C-611,2026-05-06,2026-05-12,6,West,Cloud Services,2,199.50,399.00,Shipped,No
+ORD-1008,C-118,2026-05-07,2026-05-10,3,Midwest,Software,5,89.00,445.00,Delivered,No
+ORD-1009,C-764,2026-05-09,2026-05-11,2,Northeast,Hardware,1,1099.00,1099.00,Delivered,Yes
+ORD-1010,C-344,2026-05-10,2026-05-16,6,Southeast,Training,2,199.00,398.00,Cancelled,No

@@ -1,0 +1,27 @@
+{
+  "rows_processed": 14,
+  "clean_records": 8,
+  "rejected_records": 6,
+  "issues_found": 6,
+  "high_severity_issues": 6,
+  "pipeline_score": 46,
+  "total_revenue": "4273.00",
+  "revenue_by_region": {
+    "Midwest": "445.00",
+    "Northeast": "1834.00",
+    "Southeast": "1297.00",
+    "West": "697.00"
+  },
+  "status_counts": {
+    "Cancelled": 1,
+    "Delivered": 4,
+    "Processing": 1,
+    "Shipped": 2
+  },
+  "top_issue_fields": {
+    "ship_date": 2,
+    "order_id": 2,
+    "quantity": 1,
+    "status": 1
+  }
+}
