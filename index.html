@@ -6,16 +6,16 @@
   <title>BB DataPipeline</title>
   <style>
     :root {
-      --ink: #2c2b30;
-      --charcoal: #4f4f51;
-      --paper: #f5f1f2;
-      --mist: #d6d6d6;
-      --rose: #f2c4ce;
-      --coral: #f58f7c;
-      --mint: #b8f2d0;
-      --gold: #ffd166;
+      --navy: #00204a;
+      --blue: #005792;
+      --cyan: #00bbf0;
+      --amber: #fdb44b;
+      --cream: #f7f9fb;
+      --panel: #061d35;
+      --panel-2: #0d2f52;
+      --line: rgba(0, 187, 240, 0.26);
       --white: #ffffff;
-      --shadow: 0 24px 70px rgba(44, 43, 48, 0.22);
+      --shadow: 0 24px 70px rgba(0, 32, 74, 0.28);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
@@ -30,11 +30,14 @@
     body {
       margin: 0;
       min-height: 100vh;
-      color: var(--ink);
+      color: var(--cream);
       background:
-        radial-gradient(circle at 12% 8%, rgba(245, 143, 124, 0.22), transparent 30rem),
-        radial-gradient(circle at 88% 0%, rgba(242, 196, 206, 0.42), transparent 28rem),
-        linear-gradient(135deg, #f1eeee 0%, #ddd9d9 48%, #f5e5e0 100%);
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 12% 12%, rgba(0, 187, 240, 0.28), transparent 28rem),
+        radial-gradient(circle at 86% 8%, rgba(253, 180, 75, 0.2), transparent 30rem),
+        linear-gradient(135deg, #00172f 0%, #00204a 48%, #00335f 100%);
+      background-size: 42px 42px, 42px 42px, auto, auto, auto;
     }
 
     button,
@@ -48,24 +51,29 @@
     }
 
     .shell {
-      width: min(1180px, calc(100% - 32px));
+      width: min(1260px, calc(100% - 28px));
       margin: 0 auto;
-      padding: 28px 0 54px;
+      padding: 22px 0 54px;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 18px;
     }
 
     .topbar {
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: space-between;
+      flex-direction: column;
       gap: 16px;
-      margin-bottom: 20px;
       color: var(--white);
-      background: rgba(44, 43, 48, 0.94);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 18px;
-      padding: 14px 16px;
+      background: rgba(0, 20, 44, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
       box-shadow: var(--shadow);
-      z-index: 5;
+      position: sticky;
+      top: 22px;
+      align-self: start;
       backdrop-filter: blur(14px);
     }
 
@@ -75,45 +83,77 @@
       gap: 12px;
       font-weight: 800;
       letter-spacing: 0;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(0, 187, 240, 0.18);
     }
 
     .brand-mark {
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
       display: grid;
       place-items: center;
-      color: var(--ink);
-      background: linear-gradient(135deg, var(--rose), var(--coral));
-      border-radius: 12px;
+      color: var(--navy);
+      background: var(--cyan);
+      border-radius: 6px;
       font-weight: 900;
+      box-shadow: 6px 6px 0 var(--amber);
     }
 
     .top-actions {
       display: flex;
-      align-items: center;
+      align-items: stretch;
       gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .rail-status {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .rail-status div {
+      border-left: 3px solid var(--cyan);
+      padding: 9px 0 9px 10px;
+      background: rgba(0, 187, 240, 0.06);
+    }
+
+    .rail-status span {
+      display: block;
+      color: rgba(247, 249, 251, 0.54);
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .rail-status strong {
+      display: block;
+      margin-top: 3px;
+      color: var(--cream);
+      font-size: 0.95rem;
     }
 
     .pill,
     .action-button {
-      border-radius: 999px;
-      padding: 10px 14px;
+      border-radius: 6px;
+      padding: 11px 12px;
       font-size: 0.88rem;
       font-weight: 800;
-      white-space: nowrap;
+      text-align: left;
     }
 
     .pill {
-      color: var(--rose);
-      background: rgba(242, 196, 206, 0.11);
-      border: 1px solid rgba(242, 196, 206, 0.24);
+      color: var(--amber);
+      background: rgba(253, 180, 75, 0.1);
+      border: 1px solid rgba(253, 180, 75, 0.28);
     }
 
     .action-button {
-      color: var(--ink);
-      background: var(--white);
+      color: var(--cream);
+      background: rgba(0, 187, 240, 0.12);
+      border: 1px solid var(--line);
       transition: transform 180ms ease, background 180ms ease;
     }
 
@@ -122,15 +162,37 @@
     .tab-button:hover,
     .stage-card:hover,
     .issue-card:hover {
-      transform: translateY(-2px);
+      transform: translateX(3px);
+    }
+
+    .workspace {
+      min-width: 0;
+    }
+
+    .console-strip {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: rgba(247, 249, 251, 0.76);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.82rem;
+    }
+
+    .console-strip::before,
+    .console-strip::after {
+      content: "";
+      height: 1px;
+      background: var(--line);
     }
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
-      gap: 20px;
+      grid-template-columns: minmax(0, 1.16fr) minmax(280px, 0.84fr);
+      gap: 14px;
       align-items: stretch;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
     }
 
     .hero-panel,
@@ -138,37 +200,40 @@
     .section,
     .stage-card,
     .issue-card {
-      border: 1px solid rgba(44, 43, 48, 0.12);
-      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+      background: rgba(247, 249, 251, 0.94);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
     }
 
     .hero-panel {
-      border-radius: 24px;
-      padding: clamp(24px, 5vw, 56px);
+      border-radius: 8px;
+      padding: clamp(24px, 5vw, 54px);
       overflow: hidden;
       position: relative;
+      color: var(--navy);
+      background:
+        linear-gradient(90deg, rgba(0, 187, 240, 0.16) 0 1px, transparent 1px 32px),
+        linear-gradient(180deg, rgba(0, 187, 240, 0.12) 0 1px, transparent 1px 32px),
+        var(--cream);
     }
 
     .hero-panel::after {
       content: "";
       position: absolute;
-      width: 210px;
-      height: 210px;
-      right: -80px;
-      bottom: -90px;
-      border-radius: 34px;
-      background: linear-gradient(135deg, rgba(245, 143, 124, 0.62), rgba(242, 196, 206, 0.4));
-      transform: rotate(18deg);
+      width: 34%;
+      height: 10px;
+      left: 0;
+      bottom: 0;
+      background: var(--amber);
+      box-shadow: 260px 0 0 var(--cyan), 520px 0 0 var(--blue);
     }
 
     .eyebrow {
       width: fit-content;
       margin: 0 0 16px;
-      color: var(--ink);
-      background: var(--rose);
-      border-radius: 999px;
+      color: var(--cream);
+      background: var(--blue);
+      border-radius: 4px;
       padding: 8px 12px;
       font-size: 0.78rem;
       font-weight: 900;
@@ -179,49 +244,48 @@
     h1 {
       max-width: 760px;
       margin: 0;
-      font-size: clamp(2.3rem, 7vw, 5.9rem);
-      line-height: 0.92;
+      font-size: clamp(2.45rem, 7vw, 6.2rem);
+      line-height: 0.86;
       letter-spacing: 0;
     }
 
     .hero-copy {
       max-width: 650px;
       margin: 20px 0 0;
-      color: #514f55;
+      color: #25435e;
       font-size: 1.08rem;
       line-height: 1.7;
     }
 
     .score-panel {
-      border-radius: 24px;
+      border-radius: 8px;
       padding: 24px;
       display: grid;
       align-content: space-between;
-      min-height: 360px;
+      min-height: 330px;
       color: var(--white);
-      background:
-        linear-gradient(145deg, rgba(44, 43, 48, 0.98), rgba(79, 79, 81, 0.95)),
-        var(--ink);
+      background: linear-gradient(145deg, rgba(0, 32, 74, 0.98), rgba(0, 87, 146, 0.92));
     }
 
     .score-ring {
-      width: min(230px, 74vw);
+      width: min(210px, 70vw);
       aspect-ratio: 1;
       margin: 8px auto 18px;
-      border-radius: 50%;
+      border-radius: 8px;
       display: grid;
       place-items: center;
-      background: conic-gradient(var(--coral) calc(var(--score) * 1%), rgba(255, 255, 255, 0.11) 0);
-      box-shadow: inset 0 0 0 18px rgba(255, 255, 255, 0.04);
+      background:
+        linear-gradient(to top, var(--cyan) calc(var(--score) * 1%), rgba(255, 255, 255, 0.1) 0);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
     }
 
     .score-core {
-      width: 72%;
-      aspect-ratio: 1;
-      border-radius: 50%;
+      width: calc(100% - 34px);
+      height: calc(100% - 34px);
+      border-radius: 6px;
       display: grid;
       place-items: center;
-      background: var(--ink);
+      background: rgba(0, 32, 74, 0.9);
       text-align: center;
     }
 
@@ -232,7 +296,7 @@
     }
 
     .score-core span {
-      color: var(--rose);
+      color: var(--amber);
       font-size: 0.78rem;
       font-weight: 800;
       text-transform: uppercase;
@@ -242,23 +306,24 @@
     .metrics {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
     .metric {
       min-width: 0;
-      border-radius: 18px;
+      border-radius: 8px;
       padding: 16px;
-      background: rgba(255, 255, 255, 0.75);
-      border: 1px solid rgba(44, 43, 48, 0.1);
+      color: var(--cream);
+      background: rgba(0, 20, 44, 0.78);
+      border: 1px solid var(--line);
     }
 
     .metric span,
     .section-label,
     .mini-label {
       display: block;
-      color: #6a676d;
+      color: rgba(0, 187, 240, 0.86);
       font-size: 0.74rem;
       font-weight: 900;
       letter-spacing: 0.08em;
@@ -274,23 +339,24 @@
 
     .pipeline-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+      grid-template-columns: 1fr;
+      gap: 10px;
     }
 
     .stage-card {
-      min-height: 155px;
-      border-radius: 18px;
-      padding: 16px;
+      min-height: 112px;
+      border-radius: 8px;
+      padding: 14px;
       text-align: left;
       transition: transform 180ms ease, border 180ms ease, background 180ms ease;
+      color: var(--cream);
+      background: rgba(0, 20, 44, 0.72);
     }
 
     .stage-card.active {
-      background: var(--ink);
-      color: var(--white);
-      border-color: var(--coral);
+      background: var(--cyan);
+      color: var(--navy);
+      border-color: var(--amber);
     }
 
     .stage-number {
@@ -298,10 +364,10 @@
       place-items: center;
       width: 34px;
       height: 34px;
-      margin-bottom: 18px;
-      border-radius: 12px;
-      color: var(--ink);
-      background: var(--coral);
+      margin-bottom: 12px;
+      border-radius: 6px;
+      color: var(--navy);
+      background: var(--amber);
       font-weight: 900;
     }
 
@@ -320,14 +386,20 @@
 
     .content-grid {
       display: grid;
-      grid-template-columns: 0.92fr 1.08fr;
-      gap: 20px;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
     }
 
     .section {
-      border-radius: 22px;
-      padding: 20px;
+      border-radius: 8px;
+      padding: 18px;
       overflow: hidden;
+      color: var(--navy);
+    }
+
+    .section-spaced {
+      margin-top: 14px;
     }
 
     .section-head {
@@ -352,10 +424,10 @@
 
     .tab-button,
     .filter-button {
-      border-radius: 999px;
+      border-radius: 6px;
       padding: 9px 12px;
-      color: var(--ink);
-      background: rgba(44, 43, 48, 0.07);
+      color: var(--navy);
+      background: rgba(0, 32, 74, 0.08);
       font-weight: 850;
       transition: transform 180ms ease, background 180ms ease, color 180ms ease;
     }
@@ -363,26 +435,27 @@
     .tab-button.active,
     .filter-button.active {
       color: var(--white);
-      background: var(--ink);
+      background: var(--blue);
     }
 
     .issue-list {
       display: grid;
       gap: 10px;
-      max-height: 460px;
+      max-height: 520px;
       overflow: auto;
       padding-right: 4px;
     }
 
     .issue-card {
-      border-radius: 16px;
+      border-radius: 8px;
       padding: 14px;
       text-align: left;
       transition: transform 180ms ease, border 180ms ease;
     }
 
     .issue-card.active {
-      border-color: var(--coral);
+      border-color: var(--cyan);
+      box-shadow: 5px 0 0 var(--cyan) inset;
     }
 
     .issue-top {
@@ -393,10 +466,10 @@
     }
 
     .severity {
-      border-radius: 999px;
+      border-radius: 4px;
       padding: 5px 8px;
-      color: var(--ink);
-      background: var(--gold);
+      color: var(--navy);
+      background: var(--amber);
       font-size: 0.72rem;
       font-weight: 900;
       text-transform: uppercase;
@@ -404,12 +477,14 @@
 
     .detail-panel {
       min-height: 360px;
-      border-radius: 18px;
+      border-radius: 8px;
       padding: 18px;
       color: var(--white);
       background:
-        linear-gradient(145deg, rgba(44, 43, 48, 0.96), rgba(79, 79, 81, 0.92)),
-        var(--ink);
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(145deg, rgba(0, 32, 74, 0.98), rgba(0, 87, 146, 0.92));
+      background-size: 24px 24px, 24px 24px, auto;
     }
 
     .detail-panel h3 {
@@ -431,10 +506,10 @@
     }
 
     .mini-card {
-      border-radius: 16px;
+      border-radius: 8px;
       padding: 14px;
       background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 187, 240, 0.22);
     }
 
     .mini-card strong {
@@ -459,21 +534,20 @@
     .bar-track {
       height: 14px;
       overflow: hidden;
-      border-radius: 999px;
-      background: rgba(44, 43, 48, 0.1);
+      border-radius: 2px;
+      background: rgba(0, 32, 74, 0.12);
     }
 
     .bar-fill {
       height: 100%;
       width: var(--bar);
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--coral), var(--rose));
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--amber));
     }
 
     .table-wrap {
       overflow: auto;
-      border-radius: 18px;
-      border: 1px solid rgba(44, 43, 48, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 32, 74, 0.14);
       background: rgba(255, 255, 255, 0.7);
     }
 
@@ -487,14 +561,14 @@
     th,
     td {
       padding: 12px 14px;
-      border-bottom: 1px solid rgba(44, 43, 48, 0.09);
+      border-bottom: 1px solid rgba(0, 32, 74, 0.09);
       text-align: left;
       white-space: nowrap;
     }
 
     th {
-      color: #6a676d;
-      background: rgba(44, 43, 48, 0.05);
+      color: var(--blue);
+      background: rgba(0, 187, 240, 0.08);
       font-size: 0.75rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -505,12 +579,28 @@
     }
 
     @media (max-width: 940px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        position: static;
+      }
+
+      .top-actions {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
       .hero,
       .content-grid {
         grid-template-columns: 1fr;
       }
 
-      .pipeline-grid,
+      .pipeline-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
       .metrics {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -523,13 +613,12 @@
       }
 
       .topbar {
-        position: static;
         align-items: flex-start;
-        flex-direction: column;
       }
 
       .top-actions {
-        justify-content: flex-start;
+        grid-template-columns: 1fr;
+        width: 100%;
       }
 
       .pipeline-grid,
@@ -551,6 +640,11 @@
         <div class="brand-mark">DP</div>
         <span>BB DataPipeline</span>
       </div>
+      <div class="rail-status" aria-label="Pipeline run status">
+        <div><span>Run ID</span><strong>etl-2026-061</strong></div>
+        <div><span>Mode</span><strong>Validate + Transform</strong></div>
+        <div><span>Output</span><strong>CSV / JSON</strong></div>
+      </div>
       <div class="top-actions">
         <span class="pill">Python ETL</span>
         <button class="action-button" data-download="clean">Download Clean CSV</button>
@@ -558,96 +652,104 @@
       </div>
     </nav>
 
-    <section class="hero">
-      <div class="hero-panel">
-        <p class="eyebrow">Data Engineering Portfolio Project</p>
-        <h1>Operational Data Pipeline</h1>
-        <p class="hero-copy">
-          A Python workflow that ingests messy order data, validates the records, standardizes fields, rejects bad rows, and produces clean exports that analysts and support teams can trust.
-        </p>
+    <div class="workspace">
+      <div class="console-strip">
+        <span>pipeline.run --source raw_orders.csv --mode validate-transform-publish</span>
       </div>
 
-      <aside class="score-panel" style="--score: 46">
-        <div>
-          <p class="section-label">Pipeline Health</p>
-          <div class="score-ring" aria-label="Pipeline score 46 out of 100">
-            <div class="score-core">
-              <div>
-                <strong id="scoreValue">46</strong>
-                <span>Score</span>
+      <section class="hero">
+        <div class="hero-panel">
+          <p class="eyebrow">Data Engineering Portfolio Project</p>
+          <h1>Operational Data Pipeline</h1>
+          <p class="hero-copy">
+            A Python workflow that ingests messy order data, validates the records, standardizes fields, rejects bad rows, and produces clean exports that analysts and support teams can trust.
+          </p>
+        </div>
+
+        <aside class="score-panel" style="--score: 46">
+          <div>
+            <p class="section-label">Pipeline Health</p>
+            <div class="score-ring" aria-label="Pipeline score 46 out of 100">
+              <div class="score-core">
+                <div>
+                  <strong id="scoreValue">46</strong>
+                  <span>Score</span>
+                </div>
               </div>
             </div>
           </div>
+          <p>The score reflects the raw sample before cleanup. The cleaned export removes high-risk records and keeps the pipeline output usable.</p>
+        </aside>
+      </section>
+
+      <section class="metrics" aria-label="Pipeline metrics">
+        <div class="metric"><span>Rows Processed</span><strong id="rowsMetric">14</strong></div>
+        <div class="metric"><span>Clean Records</span><strong id="cleanMetric">8</strong></div>
+        <div class="metric"><span>Issues Found</span><strong id="issuesMetric">6</strong></div>
+        <div class="metric"><span>Total Revenue</span><strong id="revenueMetric">$4.0K</strong></div>
+      </section>
+
+      <section class="content-grid">
+        <section class="pipeline-grid" aria-label="Pipeline stages">
+          <button class="stage-card active" data-stage="ingest">
+            <span class="stage-number">01</span>
+            <h3>Ingest</h3>
+            <p>Reads raw CSV order data with inconsistent values.</p>
+          </button>
+          <button class="stage-card" data-stage="validate">
+            <span class="stage-number">02</span>
+            <h3>Validate</h3>
+            <p>Checks duplicates, dates, required fields, quantities, and status values.</p>
+          </button>
+          <button class="stage-card" data-stage="transform">
+            <span class="stage-number">03</span>
+            <h3>Transform</h3>
+            <p>Standardizes customer IDs, regions, categories, revenue, and fulfillment days.</p>
+          </button>
+          <button class="stage-card" data-stage="publish">
+            <span class="stage-number">04</span>
+            <h3>Publish</h3>
+            <p>Writes clean CSV, issue logs, and summary JSON reports.</p>
+          </button>
+          <button class="stage-card" data-stage="monitor">
+            <span class="stage-number">05</span>
+            <h3>Monitor</h3>
+            <p>Surfaces risk areas so the next run can improve.</p>
+          </button>
+        </section>
+
+        <div>
+          <section class="section">
+            <div class="section-head">
+              <div>
+                <span class="section-label">Validation Queue</span>
+                <h2>Issues</h2>
+              </div>
+            </div>
+            <div class="filters" id="filters"></div>
+            <div class="issue-list" id="issueList" aria-live="polite"></div>
+          </section>
+
+          <section class="section section-spaced">
+            <div class="section-head">
+              <div>
+                <span class="section-label">Pipeline Explorer</span>
+                <h2 id="panelTitle">Stage Details</h2>
+              </div>
+              <div class="tabs" id="tabs">
+                <button class="tab-button active" data-view="stage">Stage</button>
+                <button class="tab-button" data-view="charts">Charts</button>
+                <button class="tab-button" data-view="records">Records</button>
+              </div>
+            </div>
+
+            <div id="stageView" class="detail-panel"></div>
+            <div id="chartsView" class="hidden chart-grid"></div>
+            <div id="recordsView" class="hidden table-wrap"></div>
+          </section>
         </div>
-        <p>The score reflects the raw sample before cleanup. The cleaned export removes high-risk records and keeps the pipeline output usable.</p>
-      </aside>
-    </section>
-
-    <section class="metrics" aria-label="Pipeline metrics">
-      <div class="metric"><span>Rows Processed</span><strong id="rowsMetric">14</strong></div>
-      <div class="metric"><span>Clean Records</span><strong id="cleanMetric">8</strong></div>
-      <div class="metric"><span>Issues Found</span><strong id="issuesMetric">6</strong></div>
-      <div class="metric"><span>Total Revenue</span><strong id="revenueMetric">$4.0K</strong></div>
-    </section>
-
-    <section class="pipeline-grid" aria-label="Pipeline stages">
-      <button class="stage-card active" data-stage="ingest">
-        <span class="stage-number">01</span>
-        <h3>Ingest</h3>
-        <p>Reads raw CSV order data with inconsistent values.</p>
-      </button>
-      <button class="stage-card" data-stage="validate">
-        <span class="stage-number">02</span>
-        <h3>Validate</h3>
-        <p>Checks duplicates, dates, required fields, quantities, and status values.</p>
-      </button>
-      <button class="stage-card" data-stage="transform">
-        <span class="stage-number">03</span>
-        <h3>Transform</h3>
-        <p>Standardizes customer IDs, regions, categories, revenue, and fulfillment days.</p>
-      </button>
-      <button class="stage-card" data-stage="publish">
-        <span class="stage-number">04</span>
-        <h3>Publish</h3>
-        <p>Writes clean CSV, issue logs, and summary JSON reports.</p>
-      </button>
-      <button class="stage-card" data-stage="monitor">
-        <span class="stage-number">05</span>
-        <h3>Monitor</h3>
-        <p>Surfaces risk areas so the next run can improve.</p>
-      </button>
-    </section>
-
-    <section class="content-grid">
-      <div class="section">
-        <div class="section-head">
-          <div>
-            <span class="section-label">Validation Queue</span>
-            <h2>Issues</h2>
-          </div>
-        </div>
-        <div class="filters" id="filters"></div>
-        <div class="issue-list" id="issueList" aria-live="polite"></div>
-      </div>
-
-      <div class="section">
-        <div class="section-head">
-          <div>
-            <span class="section-label">Pipeline Explorer</span>
-            <h2 id="panelTitle">Stage Details</h2>
-          </div>
-          <div class="tabs" id="tabs">
-            <button class="tab-button active" data-view="stage">Stage</button>
-            <button class="tab-button" data-view="charts">Charts</button>
-            <button class="tab-button" data-view="records">Records</button>
-          </div>
-        </div>
-
-        <div id="stageView" class="detail-panel"></div>
-        <div id="chartsView" class="hidden chart-grid"></div>
-        <div id="recordsView" class="hidden table-wrap"></div>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <script>
