@@ -1,6 +1,6 @@
-# BB DataPipeline
+# BB Data Pipeline
 
-BB DataPipeline is a Python ETL project that turns messy operational order data into cleaned records, validation findings, and recruiter-friendly summary reports.
+BB Data Pipeline is a Python ETL project that turns messy operational order data into cleaned records, validation findings, and recruiter-friendly summary reports.
 
 It is built to show the kind of work behind data engineering: ingesting raw files, validating data quality, transforming fields, creating exports, and explaining what changed along the way.
 
@@ -10,7 +10,7 @@ It is built to show the kind of work behind data engineering: ingesting raw file
 
 The demo lets you preview a pipeline run, filter validation issues, inspect transformed records, and download sample outputs directly in the browser.
 
-![BB DataPipeline dashboard](assets/datapipeline-dashboard.png)
+![BB Data Pipeline dashboard](assets/datapipeline-dashboard.png)
 
 ## What It Does
 
